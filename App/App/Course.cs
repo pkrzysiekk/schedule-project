@@ -6,5 +6,10 @@ using System.Threading.Tasks;
 
 namespace App
 {
-  
+    public class Course
+    {
+        public string classRoom { get; set; }
+        public string tutor {  get; set; }
+
+    }
 }
