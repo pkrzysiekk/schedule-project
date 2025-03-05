@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    public class Course
+    public class Tutor
     {
-        public string classRoom { get; set; }
-        public string tutor {  get; set; }
+        public string Name {  get; set; }
+        public string Course { get; set; }
 
+        public bool IsLead { get; set; }
     }
 }

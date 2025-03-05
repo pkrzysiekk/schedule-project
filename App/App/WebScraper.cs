@@ -49,11 +49,17 @@ namespace App
             {
                 _driver.Navigate().GoToUrl(url);
                 var title = _driver.FindElements(By.CssSelector(".title"));
-                string name=title.Select(x => x.Text.ToString())
+                string? name=title.Select(x => x.Text.ToString())
                     .Where(x=>x.Contains("Plan"))
                     .FirstOrDefault();
-                Console.WriteLine(name);
-
+                if(name != null)
+                {
+                    int startingIndex = name.IndexOf("-");
+                    int endIndex = name.IndexOf(",");
+                    string teacherName = name.Substring(startingIndex, endIndex - startingIndex);
+                    Console.WriteLine(teacherName);
+                }
+         
 
 
             }
