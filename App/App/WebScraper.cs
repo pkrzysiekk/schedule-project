@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools.V131.Debugger;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
@@ -12,17 +13,30 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    public class WebScraper
+    public class WebScraper :IDisposable
     {
-        public ChromeDriver _driver;
+        private ChromeDriver _driver;
         private CoursesHandler _coursesHandler;
+        private bool _disposed = false;
         public WebScraper()
         {
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("--headless=new");
+
+            chromeOptions.AddArguments("--headless");
+            chromeOptions.AddArguments("--no-sandbox");
+            chromeOptions.AddArguments("--disable-dev-shm-usage");
+            chromeOptions.AddArguments("--disable-software-rasterizer");
+            chromeOptions.AddArguments("--disable-gpu");
+            chromeOptions.AddArguments("--disk-cache-size=0");
+
+       
+
             _driver = new ChromeDriver(chromeOptions);
             _coursesHandler = new CoursesHandler();
         }
+
+
+
         public Course? GetCourse(string text)
         {
             Course course = new Course();
@@ -40,7 +54,15 @@ namespace App
         {
             _driver.Navigate().GoToUrl(url);
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
-            wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".coursediv")));
+            try
+            {
+                wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".coursediv")));
+
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return [];
+            }
             var courseCard = _driver.FindElements(By.CssSelector(".coursediv"));
 
             List<Tutor> tutors=new List<Tutor>();
@@ -77,8 +99,6 @@ namespace App
                                 continue;
                             }
                                 tutors.Add(tutor);
-                            
-                              
                         }
 
                     }
@@ -87,8 +107,24 @@ namespace App
             }
             return tutors;
         }
+        public void Dispose()
+        {
+            this.Quit();
+        }
+        public void Quit()
+        {
+            if(!_disposed)
+            {
+                _coursesHandler.Quit();
+                _driver.Quit();
+                _disposed = true;
+            }
+        }
+        ~WebScraper()
+        { 
+           Quit();
+        }
 
-        
 
     }
 }
