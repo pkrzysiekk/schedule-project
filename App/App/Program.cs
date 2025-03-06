@@ -16,9 +16,21 @@ class Program
             Console.WriteLine("*********************");
             Console.WriteLine($"Tutor: {tutor.Name}");
             Console.WriteLine($"Course: {tutor.Course.courseName}");
+            Console.WriteLine($"Type: {tutor.Course.type}");
             Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
             Console.WriteLine("*********************");
 
+        }
+        Console.WriteLine("Enter subject name: ");
+        string name=Console.ReadLine();
+        var tutorToFind = tutors.Find(x => x.Course.courseName==name && x.IsLead);
+        if (tutorToFind != null)
+        {
+            Console.WriteLine($"Tutor found: {tutorToFind.Name}");
+        }
+        else
+        {
+            Console.WriteLine("Tutor not found");
         }
         scraper._driver.Quit();
 

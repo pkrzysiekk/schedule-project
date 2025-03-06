@@ -72,8 +72,13 @@ namespace App
                             {
                                 tutor.IsLead = true;
                             }
-
-                            tutors.Add(tutor);  
+                            if(tutors.Contains(tutor))
+                            {
+                                continue;
+                            }
+                                tutors.Add(tutor);
+                            
+                              
                         }
 
                     }
