@@ -9,7 +9,7 @@ namespace App
     public class Tutor
     {
         public string Name {  get; set; }
-        public string Course { get; set; }
+        public Course Course { get; set; }
 
         public bool IsLead { get; set; }
     }

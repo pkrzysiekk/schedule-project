@@ -23,21 +23,38 @@ namespace App
             _driver = new ChromeDriver(chromeOptions);
             _coursesHandler = new CoursesHandler();
         }
-
-        public List<string> GetTutorLinkList(string url)
+        public Course? GetCourse(string text)
+        {
+            Course course = new Course();
+            int pivot = text.IndexOf(",");
+            int endIndex = text.IndexOf('\r');
+            if(pivot==-1 || endIndex == -1)
+            {
+                return null;
+            }
+            course.courseName = text.Substring(0, pivot);
+            course.type = text.Substring(pivot+1,endIndex-pivot);
+            return course;
+        }
+        public List<Tutor> GetTutorLinkList(string url)
         {
             _driver.Navigate().GoToUrl(url);
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
             wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".coursediv")));
             var courseCard = _driver.FindElements(By.CssSelector(".coursediv"));
-            List<string> list = new List<string>();
+
             List<Tutor> tutors=new List<Tutor>();
+
             foreach (var element in courseCard)
             {
                 var a = element.FindElements(By.CssSelector("a"));
                 var text = element.Text;
-                
-                Console.WriteLine(text);
+                Course? course= GetCourse(text);
+                Tutor tutor = new Tutor();
+                if (course == null)
+                {
+                    continue;
+                }
                 foreach (var link in a)
                 {
                     string href;
@@ -46,18 +63,24 @@ namespace App
 
                     if (href != null && href.Contains("type=10"))
                     {
-                        list.Add(href);
                         var teacher = _coursesHandler.GetTeacherFullName(href);
                         if (teacher != null)
                         {
-                            Console.WriteLine(teacher);
+                            tutor.Name = teacher;
+                            tutor.Course = course;
+                            if (course.type.Contains("wyk"))
+                            {
+                                tutor.IsLead = true;
+                            }
+
+                            tutors.Add(tutor);  
                         }
 
                     }
 
                 }
             }
-            return list;
+            return tutors;
         }
 
         
