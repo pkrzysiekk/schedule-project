@@ -1,70 +1,66 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools.V131.Debugger;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace App
 {
     public class WebScraper
     {
         public ChromeDriver _driver;
+        private CoursesHandler _coursesHandler;
         public WebScraper()
         {
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("--headless=new"); // comment out for testing
+            chromeOptions.AddArguments("--headless=new");
             _driver = new ChromeDriver(chromeOptions);
+            _coursesHandler = new CoursesHandler();
         }
 
         public List<string> GetTutorLinkList(string url)
         {
             _driver.Navigate().GoToUrl(url);
-            var productElements = _driver.FindElements(By.CssSelector(".coursediv"));
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
+            wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".coursediv")));
+            var courseCard = _driver.FindElements(By.CssSelector(".coursediv"));
             List<string> list = new List<string>();
-
-            foreach (var element in productElements)
+            List<Tutor> tutors=new List<Tutor>();
+            foreach (var element in courseCard)
             {
                 var a = element.FindElements(By.CssSelector("a"));
+                var text = element.Text;
+                
+                Console.WriteLine(text);
                 foreach (var link in a)
                 {
-                    var href = link.GetAttribute("href");
+                    string href;
+
+                    href = link.GetAttribute("href");
+
                     if (href != null && href.Contains("type=10"))
                     {
-                        list.Add(href);  // Add matching links to the list
+                        list.Add(href);
+                        var teacher = _coursesHandler.GetTeacherFullName(href);
+                        if (teacher != null)
+                        {
+                            Console.WriteLine(teacher);
+                        }
+
                     }
+
                 }
             }
-
             return list;
         }
 
-        public List<Course> GetCourses(List<string> urls) 
-        {
-            List<Course> courses = new List<Course>();
-
-            foreach (var url in urls)
-            {
-                _driver.Navigate().GoToUrl(url);
-                var title = _driver.FindElements(By.CssSelector(".title"));
-                string? name=title.Select(x => x.Text.ToString())
-                    .Where(x=>x.Contains("Plan"))
-                    .FirstOrDefault();
-                if(name != null)
-                {
-                    int startingIndex = name.IndexOf("-");
-                    int endIndex = name.IndexOf(",");
-                    string teacherName = name.Substring(startingIndex, endIndex - startingIndex);
-                    Console.WriteLine(teacherName);
-                }
-         
-
-
-            }
-           return courses;
-        }
+        
 
     }
 }
