@@ -46,9 +46,25 @@ namespace App
             {
                 return null;
             }
-            course.courseName = text.Substring(0, pivot);
+            course.courseShortName = text.Substring(0, pivot);
             course.type = text.Substring(pivot+1,endIndex-pivot);
             return course;
+        }
+        public Dictionary<string,string> GetSubjectsFullName(string[] strings)
+        {
+            string[] filtered = strings.Where(x => x.Contains("występowanie:")).ToArray();
+            Dictionary<string, string> courses = new();
+            foreach (var item in filtered)
+            {
+                int pivot = item.IndexOf("-");
+                int endIndex = item.IndexOf(",")-1;
+                string shortName = item.Substring(0, pivot-1);
+                string fullName = item.Substring(pivot + 1,endIndex-pivot);
+                shortName= shortName.Trim();
+                fullName = fullName.Trim();
+                courses.Add(shortName, fullName);
+            }
+            return courses;
         }
         public List<Tutor> GetTutorLinkList(string url)
         {
@@ -64,6 +80,16 @@ namespace App
                 return [];
             }
             var courseCard = _driver.FindElements(By.CssSelector(".coursediv"));
+            var data=_driver.FindElements(By.CssSelector(".data"));
+            var subjects= data.Where(x => x.Text.Contains("najechanie")).FirstOrDefault();
+            Dictionary<string, string> courses = new();
+
+            if (subjects is not null)
+            {
+                var text = subjects.Text;
+                string[] strings = text.Split("\n");
+                courses = GetSubjectsFullName(strings);
+            }
 
             List<Tutor> tutors=new List<Tutor>();
 
@@ -88,6 +114,7 @@ namespace App
                         var teacher = _coursesHandler.GetTeacherFullName(href);
                         if (teacher != null)
                         {
+                            course.courseFullName = courses[course.courseShortName];
                             tutor.Name = teacher;
                             tutor.Course = course;
                             if (course.type.Contains("wyk"))

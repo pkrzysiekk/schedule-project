@@ -21,12 +21,14 @@ class Program
 
             tasks.Add(Task.Run(() =>
             {
-                using WebScraper scraper = new WebScraper();  // Tworzymy scraper w Task.Run()
+                using WebScraper scraper = new WebScraper();  
                 var result = scraper.GetTutorLinkList(link);
-                scraper.Quit();  // Zamykamy scraper po zakończeniu zadania
+                scraper.Quit();  
                 return result;
             }));
         }
+
+
         List<Tutor>[] allTutors = await Task.WhenAll(tasks);
         sw.Stop();
 
@@ -36,9 +38,9 @@ class Program
 
         foreach (var tutor in formatedTutors)
         {
-            Console.WriteLine("*********************");
             Console.WriteLine($"Tutor: {tutor.Name}");
-            Console.WriteLine($"Course: {tutor.Course.courseName}");
+            Console.WriteLine($"Course: {tutor.Course.courseShortName}");
+            Console.WriteLine($"Full course name: {tutor.Course.courseFullName}");
             Console.WriteLine($"Type: {tutor.Course.type}");
             Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
             Console.WriteLine("*********************");
@@ -49,7 +51,7 @@ class Program
         Console.WriteLine("Enter subject name: ");
 
         string name = Console.ReadLine();
-        var tutorToFind = formatedTutors.Find(x => x.Course.courseName == name && x.IsLead);
+        var tutorToFind = formatedTutors.Find(x => x.Course.courseShortName == name && x.IsLead);
 
         if (tutorToFind != null)
         {

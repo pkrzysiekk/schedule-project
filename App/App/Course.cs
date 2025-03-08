@@ -8,7 +8,8 @@ namespace App
 {
     public class Course
     {
-        public string courseName { get; set; }
+        public string courseShortName { get; set; }
+        public string courseFullName { get; set; }
         public string type { get; set; }
     }
 }
