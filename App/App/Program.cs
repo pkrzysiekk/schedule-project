@@ -1,8 +1,10 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using App;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using App.WebScrapers;
+using App.Models;
+using App.Controllers;
 
 class Program
 {
@@ -10,31 +12,10 @@ class Program
     {
 
         Stopwatch sw = new Stopwatch();
-
+        ScraperController scraperController = new ScraperController();
         string json =File.ReadAllText("links.json");
         List<string> links = JsonConvert.DeserializeObject<List<string>>(json);
-        List<Task<List<Tutor>>> tasks = new();
-        sw.Start();
-
-        foreach (var link in links)
-        {
-
-            tasks.Add(Task.Run(() =>
-            {
-                using WebScraper scraper = new WebScraper();  
-                var result = scraper.GetTutorLinkList(link);
-                scraper.Quit();  
-                return result;
-            }));
-        }
-
-
-        List<Tutor>[] allTutors = await Task.WhenAll(tasks);
-        sw.Stop();
-
-
-        List<Tutor> formatedTutors = new List<Tutor>();
-        formatedTutors.AddRange(allTutors.SelectMany(tutorList => tutorList));
+       var formatedTutors = await scraperController.Scrape(links);
 
         foreach (var tutor in formatedTutors)
         {

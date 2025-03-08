@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App
+namespace App.Models
 {
     public class Tutor
     {
-        public string Name {  get; set; }
+        public string Name { get; set; }
         public Course Course { get; set; }
 
         public bool IsLead { get; set; }
@@ -17,7 +17,7 @@ namespace App
         {
             if (ReferenceEquals(a, b)) return true;
             if (a is null || b is null) return false;
-             
+
             return a.Equals(b);
         }
         public static bool operator !=(Tutor a, Tutor b)
