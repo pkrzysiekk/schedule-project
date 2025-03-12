@@ -1,37 +1,36 @@
-﻿namespace App.Models
+﻿namespace App.Models;
+
+public class Tutor
 {
-    public class Tutor
+    public string Name { get; set; }
+    public Course Course { get; set; }
+
+    public bool IsLead { get; set; }
+
+    public static bool operator ==(Tutor a, Tutor b)
     {
-        public string Name { get; set; }
-        public Course Course { get; set; }
+        if (ReferenceEquals(a, b)) return true;
+        if (a is null || b is null) return false;
 
-        public bool IsLead { get; set; }
+        return a.Equals(b);
+    }
 
-        public static bool operator ==(Tutor a, Tutor b)
+    public static bool operator !=(Tutor a, Tutor b)
+    {
+        return !(a == b);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Tutor other && obj is not null)
         {
-            if (ReferenceEquals(a, b)) return true;
-            if (a is null || b is null) return false;
-
-            return a.Equals(b);
+            return other.Name == Name && other.Course.Equals(Course) && other.IsLead == IsLead;
         }
+        return false;
+    }
 
-        public static bool operator !=(Tutor a, Tutor b)
-        {
-            return !(a == b);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is Tutor other && obj is not null)
-            {
-                return other.Name == Name && other.Course.Equals(Course) && other.IsLead == IsLead;
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Course, IsLead);
-        }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, Course, IsLead);
     }
 }
