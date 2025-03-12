@@ -13,9 +13,8 @@ class Program
 
         Stopwatch sw = new Stopwatch();
         ScraperController scraperController = new ScraperController();
-        string json =File.ReadAllText("links.json");
-        List<string> links = JsonConvert.DeserializeObject<List<string>>(json);
-       var formatedTutors = await scraperController.Scrape(links);
+
+       var formatedTutors = await scraperController.Scrape();
 
         foreach (var tutor in formatedTutors)
         {
