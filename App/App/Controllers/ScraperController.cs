@@ -1,11 +1,6 @@
 ﻿using App.Models;
 using App.WebScrapers;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -13,19 +8,19 @@ namespace App.Controllers
     {
         private string _json;
         private List<string> _links;
+
         public ScraperController()
         {
             _json = File.ReadAllText("links.json");
             _links = JsonConvert.DeserializeObject<List<string>>(_json);
-
         }
+
         public async Task<List<Tutor>> Scrape()
         {
             List<Task<List<Tutor>>> tasks = new();
 
             foreach (var link in _links)
             {
-
                 tasks.Add(Task.Run(() =>
                 {
                     using WebScraper scraper = new WebScraper();
@@ -34,7 +29,6 @@ namespace App.Controllers
                     return result;
                 }));
             }
-
 
             List<Tutor>[] allTutors = await Task.WhenAll(tasks);
 

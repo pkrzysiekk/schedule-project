@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace App.Models
+﻿namespace App.Models
 {
     public class Tutor
     {
@@ -20,6 +14,7 @@ namespace App.Models
 
             return a.Equals(b);
         }
+
         public static bool operator !=(Tutor a, Tutor b)
         {
             return !(a == b);
@@ -33,6 +28,7 @@ namespace App.Models
             }
             return false;
         }
+
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, Course, IsLead);

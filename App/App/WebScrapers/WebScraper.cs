@@ -1,16 +1,8 @@
 ﻿using App.Models;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V131.Debugger;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace App.WebScrapers
 {
@@ -19,6 +11,7 @@ namespace App.WebScrapers
         private ChromeDriver _driver;
         private CoursesHandler _coursesHandler;
         private bool _disposed = false;
+
         public WebScraper()
         {
             var chromeOptions = new ChromeOptions();
@@ -30,13 +23,9 @@ namespace App.WebScrapers
             chromeOptions.AddArguments("--disable-gpu");
             chromeOptions.AddArguments("--disk-cache-size=0");
 
-
-
             _driver = new ChromeDriver(chromeOptions);
             _coursesHandler = new CoursesHandler();
         }
-
-
 
         public Course? GetCourse(string text)
         {
@@ -51,6 +40,7 @@ namespace App.WebScrapers
             course.type = text.Substring(pivot + 1, endIndex - pivot);
             return course;
         }
+
         public Dictionary<string, string> GetSubjectsFullName(string[] strings)
         {
             string[] filtered = strings.Where(x => x.Contains("występowanie:")).ToArray();
@@ -67,6 +57,7 @@ namespace App.WebScrapers
             }
             return courses;
         }
+
         public List<Tutor> GetTutorLinkList(string url)
         {
             _driver.Navigate().GoToUrl(url);
@@ -74,7 +65,6 @@ namespace App.WebScrapers
             try
             {
                 wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".coursediv")));
-
             }
             catch (WebDriverTimeoutException)
             {
@@ -128,17 +118,17 @@ namespace App.WebScrapers
                             }
                             tutors.Add(tutor);
                         }
-
                     }
-
                 }
             }
             return tutors;
         }
+
         public void Dispose()
         {
             Quit();
         }
+
         public void Quit()
         {
             if (!_disposed)
@@ -148,11 +138,10 @@ namespace App.WebScrapers
                 _disposed = true;
             }
         }
+
         ~WebScraper()
         {
             Quit();
         }
-
-
     }
 }

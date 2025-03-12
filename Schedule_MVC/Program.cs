@@ -19,7 +19,6 @@ foreach (var tutor in formatedTutors)
     Console.WriteLine($"Type: {tutor.Course.type}");
     Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
     Console.WriteLine("*********************");
-
 }
 Console.WriteLine("Enter subject name: ");
 // Configure the HTTP request pipeline.

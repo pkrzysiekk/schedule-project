@@ -1,9 +1,7 @@
-﻿using OpenQA.Selenium.BiDi.Modules.Script;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using OpenQA.Selenium.Interactions;
 
 namespace App.WebScrapers
 {
@@ -11,6 +9,7 @@ namespace App.WebScrapers
     {
         private ChromeDriver _driver;
         private bool _disposed = false;
+
         public CoursesHandler()
         {
             var chromeOptions = new ChromeOptions();
@@ -24,8 +23,8 @@ namespace App.WebScrapers
             chromeOptions.AddArguments("--disable-gpu");
 
             _driver = new ChromeDriver(chromeOptions);
-
         }
+
         public string? GetTeacherFullName(string url)
         {
             string? teacherName = null;
@@ -53,10 +52,12 @@ namespace App.WebScrapers
 
             return teacherName;
         }
+
         public void Dispose()
         {
             Quit();
         }
+
         public void Quit()
         {
             if (!_disposed)
@@ -65,10 +66,10 @@ namespace App.WebScrapers
                 _disposed = true;
             }
         }
+
         ~CoursesHandler()
         {
             Quit();
         }
-
     }
 }

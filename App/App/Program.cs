@@ -1,20 +1,14 @@
-﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-using Newtonsoft.Json;
+﻿using App.Controllers;
 using System.Diagnostics;
-using App.WebScrapers;
-using App.Models;
-using App.Controllers;
 
-class Program
+internal class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
-
         Stopwatch sw = new Stopwatch();
         ScraperController scraperController = new ScraperController();
 
-       var formatedTutors = await scraperController.Scrape();
+        var formatedTutors = await scraperController.Scrape();
 
         foreach (var tutor in formatedTutors)
         {
@@ -24,7 +18,6 @@ class Program
             Console.WriteLine($"Type: {tutor.Course.type}");
             Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
             Console.WriteLine("*********************");
-
         }
         Console.WriteLine("Enter subject name: ");
         Console.WriteLine($"Time taken: {sw.ElapsedMilliseconds / 1000} s");
@@ -41,8 +34,5 @@ class Program
         {
             Console.WriteLine("Tutor not found");
         }
-        
-
-
     }
 }
