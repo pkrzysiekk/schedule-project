@@ -1,0 +1,25 @@
+﻿@model List<App.Models.Tutor>
+
+<h2>Lista prowadzących</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Imię i nazwisko</th>
+            <th>Przedmiot</th>
+            <th>Typ zajęć</th>
+            <th>Czy prowadzący</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tutor in Model)
+        {
+            <tr>
+                <td>@tutor.Name</td>
+                <td>@tutor.Course.courseFullName</td>
+                <td>@tutor.Course.type</td>
+                <td>@tutor.IsLead</td>
+            </tr>
+        }
+    </tbody>
+</table>
