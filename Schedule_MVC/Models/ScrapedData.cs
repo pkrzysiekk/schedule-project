@@ -9,5 +9,5 @@ public class ScrapedData
     public string Name { get; set; }
     public string CourseFullName { get; set; }
     public string CourseType { get; set; }
-    public string IsLead { get; set; }
+    public bool IsLead { get; set; }
 }

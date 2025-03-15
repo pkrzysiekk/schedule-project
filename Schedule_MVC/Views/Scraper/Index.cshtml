@@ -1,4 +1,4 @@
-﻿@model List<App.Models.Tutor>
+﻿@model List<Schedule_MVC.Models.ScrapedData>
 
 <h2>Lista prowadzących</h2>
 
@@ -16,8 +16,8 @@
         {
             <tr>
                 <td>@tutor.Name</td>
-                <td>@tutor.Course.courseFullName</td>
-                <td>@tutor.Course.type</td>
+                <td>@tutor.CourseFullName</td>
+                <td>@tutor.CourseType</td>
                 <td>@tutor.IsLead</td>
             </tr>
         }

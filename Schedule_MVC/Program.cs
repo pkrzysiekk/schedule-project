@@ -1,26 +1,33 @@
 using App.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Schedule_MVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ScheduleDB"),
+    b => b.MigrationsAssembly("Schedule_MVC")));
+
 var app = builder.Build();
-ScraperController scraperController = new ScraperController();
-string json = File.ReadAllText("links.json");
-List<string> links = JsonConvert.DeserializeObject<List<string>>(json);
-var formatedTutors = await scraperController.Scrape();
-foreach (var tutor in formatedTutors)
+
+using (var scope = app.Services.CreateScope())
 {
-    Console.WriteLine($"Tutor: {tutor.Name}");
-    Console.WriteLine($"Course: {tutor.Course.courseShortName}");
-    Console.WriteLine($"Full course name: {tutor.Course.courseFullName}");
-    Console.WriteLine($"Type: {tutor.Course.type}");
-    Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
-    Console.WriteLine("*********************");
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        await DbInitializer.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Wyst¹pi³ b³¹d podczas próby inicjalizacji bazy danych danymi: {ex.Message}");
+    }
 }
-Console.WriteLine("Enter subject name: ");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
