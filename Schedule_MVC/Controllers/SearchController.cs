@@ -18,11 +18,11 @@ public class SearchController : Controller
                                             .ToList();
         return View(allTutors);
     }
-    public IActionResult FilteredSearch(int id)
+    public IActionResult FilteredSearch(int? id)
     {
-        if(id < 0)
+        if(id == null)
         {
-            RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
         var course = _context.ScrapedData.FirstOrDefault(x => x.ID == id);
         if (course != null)
