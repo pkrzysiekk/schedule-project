@@ -10,11 +10,11 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label for="CourseFullName">Course name:</label>
-                <select class="form-control" name="id">
+                <select class="form-control" name="name">
                     <option>Select a course</option>
                     @foreach (var course in Model)
                     {
-                        <option value="@course.ID">@course.CourseFullName</option>
+                        <option value="@course.CourseFullName">@course.CourseFullName</option>
                     }
                 </select>
             </div>
