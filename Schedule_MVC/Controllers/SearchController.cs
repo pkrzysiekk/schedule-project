@@ -18,17 +18,21 @@ public class SearchController : Controller
                                             .ToList();
         return View(allTutors);
     }
-    public IActionResult FilteredSearch(int? id)
+    public IActionResult FilteredSearch(string? name)
     {
-        if(id == null)
+        if(name == null)
         {
             return RedirectToAction(nameof(Index));
         }
-        var course = _context.ScrapedData.FirstOrDefault(x => x.ID == id);
-        if (course != null)
+        var course = _context.ScrapedData.Where(x => x.CourseFullName == name && x.IsLead == true).ToList();
+        if (course.Count()!=0)
         {
             return View(course);
         }
-        else { return NotFound(); }
+        else
+        {
+            course = _context.ScrapedData.Where(x => x.CourseFullName == name).ToList();
+            return View(course);
+        }
     }
 }
