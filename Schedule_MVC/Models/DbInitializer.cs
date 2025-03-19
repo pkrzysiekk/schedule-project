@@ -19,7 +19,7 @@ public class DbInitializer
         {
             return;
         }
-        var tutors = GetAll().GetAwaiter().GetResult();
+        var tutors = await GetAll();
 
         var scrapedDataList = tutors.Select(t => new ScrapedData
         {
