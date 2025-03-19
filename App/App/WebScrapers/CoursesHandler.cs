@@ -28,8 +28,9 @@ public class CoursesHandler : IDisposable
     public string? GetTeacherFullName(string url)
     {
         string? teacherName = null;
+        int timeoutTime = 5;
         _driver.Navigate().GoToUrl(url);
-        WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
+        WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeoutTime));
         try
         {
             wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".title")));

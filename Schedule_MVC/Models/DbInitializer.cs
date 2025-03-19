@@ -10,6 +10,7 @@ public class DbInitializer
         List<Tutor> allTutors = await sc.Scrape();
         return allTutors;
     }
+
     public static async Task Initialize(AppDbContext context)
     {
         await context.Database.EnsureCreatedAsync();
@@ -26,7 +27,8 @@ public class DbInitializer
             Name = t.Name,
             CourseFullName = t.Course.courseFullName,
             CourseType = t.Course.type,
-            IsLead = t.IsLead
+            IsLead = t.IsLead,
+            isFullTime = t.Course.isFullTime
         }).ToList();
         foreach (var tutor in scrapedDataList)
         {

@@ -8,6 +8,7 @@
             <th>Imię i nazwisko</th>
             <th>Przedmiot</th>
             <th>Typ zajęć</th>
+            <th>Typ kursu</th>
             <th>Czy prowadzący?</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
                 <td>@tutor.Name</td>
                 <td>@tutor.CourseFullName</td>
                 <td>@tutor.CourseType</td>
+                <td>@(tutor.isFullTime ? "Stacjonarne" : "Zaoczne")</td>
                 <td>@tutor.IsLead</td>
             </tr>
         }

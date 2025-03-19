@@ -11,7 +11,7 @@
             <div class="form-group">
                 <label for="CourseFullName">Course name:</label>
                 <select class="form-control" name="name">
-                    <option>Select a course</option>
+                    <option value="@null">Select a course</option>
                     @foreach (var course in Model)
                     {
                         <option value="@course.CourseFullName">@course.CourseFullName</option>

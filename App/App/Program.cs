@@ -6,9 +6,10 @@ internal class Program
     private static async Task Main(string[] args)
     {
         ScraperController scraperController = new ScraperController();
-
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
         var formatedTutors = await scraperController.Scrape();
-
+        sw.Stop();
         foreach (var tutor in formatedTutors)
         {
             Console.WriteLine($"Tutor: {tutor.Name}");
@@ -16,8 +17,11 @@ internal class Program
             Console.WriteLine($"Full course name: {tutor.Course.courseFullName}");
             Console.WriteLine($"Type: {tutor.Course.type}");
             Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
+            Console.WriteLine(tutor.Course.isFullTime ? "Full time" : "extramural");
             Console.WriteLine("*********************");
         }
+        Console.WriteLine($"elapsed: {sw.ElapsedMilliseconds / 1000}");
+        Console.ReadLine();
         //Console.WriteLine("Enter subject name: ");
 
         //string name = Console.ReadLine();
