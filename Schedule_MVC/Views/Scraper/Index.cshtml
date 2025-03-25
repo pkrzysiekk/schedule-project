@@ -1,0 +1,27 @@
+﻿@model List<Schedule_MVC.Models.ScrapedData>
+
+<h2>Lista prowadzących</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Imię i nazwisko</th>
+            <th>Przedmiot</th>
+            <th>Typ zajęć</th>
+            <th>Typ kursu</th>
+            <th>Czy prowadzący?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tutor in Model)
+        {
+            <tr>
+                <td>@tutor.Name</td>
+                <td>@tutor.CourseFullName</td>
+                <td>@tutor.CourseType</td>
+                <td>@tutor.ScheduleType</td>
+                <td>@(tutor.IsLead ? "Tak" : "Nie")</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Schedule_MVC.Models.ScrapedData>
+
+<h1>Nauczyciele dla: @Model.Select(x => x.CourseFullName).First()</h1>
+@{
+	bool leadSubject = Model.Any(x => x.IsLead);
+	if(leadSubject){
+		<h3>Znaleziono prowadzącego/prowadzących:</h3>
+	}
+	else{
+		<h3>Nie znaleziono prowadzących, oto lista wszystkich nauczycieli którzy uczą tego przedmiotu</h3>
+	}
+}
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+			<tr>
+				<td>Imię:</td>
+				<td>Typ</td>
+				<td>Rodzaj Kursu</td>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var obj in Model){
+				<tr>
+					<td>@obj.Name</td>
+					<td>@obj.CourseType</td>
+					<td>@obj.ScheduleType</td>
+				</tr>
+			}
+		</tbody>
+</table>
+<strong><a asp-action="Index">Wstecz</a></strong>
+    
+</div>
+
