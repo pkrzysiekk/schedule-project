@@ -13,11 +13,11 @@ internal class Program
         foreach (var tutor in formatedTutors)
         {
             Console.WriteLine($"Tutor: {tutor.Name}");
-            Console.WriteLine($"Course: {tutor.Course.courseShortName}");
-            Console.WriteLine($"Full course name: {tutor.Course.courseFullName}");
-            Console.WriteLine($"Type: {tutor.Course.type}");
+            Console.WriteLine($"Course: {tutor.Course.CourseShortName}");
+            Console.WriteLine($"Full course name: {tutor.Course.CourseFullName}");
+            Console.WriteLine($"Type: {tutor.Course.Type}");
             Console.WriteLine(tutor.IsLead ? "Lead Tutor" : "Not lead");
-            Console.WriteLine(tutor.Course.isFullTime ? "Full time" : "extramural");
+            Console.WriteLine(tutor.Course.ScheduleType);
             Console.WriteLine("*********************");
         }
         Console.WriteLine($"elapsed: {sw.ElapsedMilliseconds / 1000}");

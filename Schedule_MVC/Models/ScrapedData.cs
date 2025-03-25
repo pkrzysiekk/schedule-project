@@ -9,7 +9,7 @@ public class ScrapedData
 
     public string Name { get; set; }
     public string CourseFullName { get; set; }
-    public bool isFullTime { get; set; }
+    public string ScheduleType { get; set; }
 
     public string CourseType { get; set; }
     public bool IsLead { get; set; }

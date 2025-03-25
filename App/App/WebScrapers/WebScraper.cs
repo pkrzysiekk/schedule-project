@@ -54,8 +54,8 @@ public class WebScraper : IDisposable
         {
             return null;
         }
-        course.courseShortName = text.Substring(0, pivot);
-        course.type = text.Substring(pivot + 1, endIndex - pivot);
+        course.CourseShortName = text.Substring(0, pivot);
+        course.Type = text.Substring(pivot + 1, endIndex - pivot);
         return course;
     }
 
@@ -84,24 +84,35 @@ public class WebScraper : IDisposable
 
     public List<Tutor> StartScraping(string url, string scheduleType)
     {
-        List<Tutor> tutors = new List<Tutor>();
+        List<Tutor> tutors = [];
+        List<Tutor> list1 = [];
+        List<Tutor> list2 = [];
+        switch (scheduleType)
+        {
+            case "stacjonarne":
+                list1 = ScrapeSelectedSchedule(url, 2, scheduleType);
+                list1 = ScrapeSelectedSchedule(url, 3, scheduleType);
+                tutors.AddRange(list1);
+                tutors.AddRange(list2);
+                break;
 
-        if (scheduleType == "stacjonarne")
-        {
-            var list1 = ScrapeSelectedSchedule(url, 2);
-            var list2 = ScrapeSelectedSchedule(url, 3);
-            tutors.AddRange(list1);
-            tutors.AddRange(list2);
+            case "niestacjonarne":
+                list1 = ScrapeSelectedSchedule(url, 2, scheduleType);
+                tutors.AddRange(list1);
+                break;
+
+            case "stacjonarne magisterskie":
+                list1 = ScrapeSelectedSchedule(url, 2, scheduleType);
+                list2 = ScrapeSelectedSchedule(url, 3, scheduleType);
+                tutors.AddRange(list1);
+                tutors.AddRange(list2);
+                break;
         }
-        else
-        {
-            var list1 = ScrapeSelectedSchedule(url, 2, false);
-            tutors.AddRange(list1);
-        }
+
         return tutors;
     }
 
-    public List<Tutor> ScrapeSelectedSchedule(string url, int menuOption, bool isFullTime = true)
+    public List<Tutor> ScrapeSelectedSchedule(string url, int menuOption, string schedeuleType)
     {
         int timeoutInterval = 5;
         _driver.Navigate().GoToUrl(url);
@@ -154,7 +165,7 @@ public class WebScraper : IDisposable
             {
                 continue;
             }
-            course.isFullTime = isFullTime ? true : false;
+            course.ScheduleType = schedeuleType;
             foreach (var link in a)
             {
                 string href;
@@ -167,19 +178,23 @@ public class WebScraper : IDisposable
                     if (teacher == null)
                     {
                         teacher = _coursesHandler.GetTeacherFullName(href);
+                        if (teacher == null)
+                        {
+                            continue;
+                        }
                         _namesDictionary.TryAdd(hrefText, teacher);
                     }
                     try
                     {
-                        course.courseFullName = courses[course.courseShortName];
+                        course.CourseFullName = courses[course.CourseShortName];
                     }
                     catch
                     {
-                        course.courseFullName = "Projekt - zespołowe przedsięwzięcie programistyczne";
+                        course.CourseFullName = "Projekt - zespołowe przedsięwzięcie programistyczne";
                     }
                     tutor.Name = teacher;
                     tutor.Course = course;
-                    if (course.type.Contains("wyk"))
+                    if (course.Type.Contains("wyk"))
                     {
                         tutor.IsLead = true;
                     }

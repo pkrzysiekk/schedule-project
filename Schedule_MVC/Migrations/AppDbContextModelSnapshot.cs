@@ -33,7 +33,7 @@ namespace Schedule_MVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CourseType")
+                    b.Property<string>("ScheduleType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

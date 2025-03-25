@@ -25,10 +25,10 @@ public class DbInitializer
         var scrapedDataList = tutors.Select(t => new ScrapedData
         {
             Name = t.Name,
-            CourseFullName = t.Course.courseFullName,
-            CourseType = t.Course.type,
+            CourseFullName = t.Course.CourseFullName,
+            CourseType = t.Course.Type,
             IsLead = t.IsLead,
-            isFullTime = t.Course.isFullTime
+            ScheduleType = t.Course.ScheduleType
         }).ToList();
         foreach (var tutor in scrapedDataList)
         {
