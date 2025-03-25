@@ -7,11 +7,20 @@ namespace App.Controllers;
 public class ScraperController
 {
     private string _json;
-    private List<ScheduleLink> _links;
+    private List<ScheduleLink>? _links;
 
     public ScraperController()
     {
-        _json = File.ReadAllText("links.json");
+        try
+        {
+            _json = File.ReadAllText("links.json");
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine("File links.json not found");
+            Environment.Exit(1);
+        }
+
         _links = JsonConvert.DeserializeObject<List<ScheduleLink>>(_json);
     }
 
@@ -23,9 +32,22 @@ public class ScraperController
         {
             tasks.Add(Task.Run(() =>
             {
+                List<Tutor> result = new();
                 using WebScraper scraper = new WebScraper();
-                var result = scraper.StartScraping(link.Url, link.Type);
-                scraper.Quit();
+
+                try
+                {
+                    result = scraper.StartScraping(link.Url, link.Type);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error whiile scrapping {link.Url}: {ex.Message}");
+                }
+                finally
+                {
+                    scraper.Quit();
+                }
+
                 return result;
             }));
         }

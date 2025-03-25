@@ -6,6 +6,7 @@ using OpenQA.Selenium.DevTools.V131.Network;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 
 namespace App.WebScrapers;
 
@@ -62,16 +63,30 @@ public class WebScraper : IDisposable
     public Dictionary<string, string> GetSubjectsFullName(string[] strings)
     {
         string[] filtered = strings.Where(x => x.Contains("występowanie:")).ToArray();
+        string pattern = @"^([\w()]+)\s*(?:\([^)]+\))?\s*-\s*([^,(]+)";
+
         Dictionary<string, string> courses = new();
         foreach (var item in filtered)
         {
-            int pivot = item.IndexOf("-");
-            int endIndex = item.IndexOf(",") - 1;
-            string shortName = item.Substring(0, pivot - 1);
-            string fullName = item.Substring(pivot + 1, endIndex - pivot);
-            shortName = shortName.Trim();
-            fullName = fullName.Trim();
-            courses.Add(shortName, fullName);
+            Match match = Regex.Match(item, pattern);
+            if (match.Success)
+            {
+                string shortName = match.Groups[1].Value;
+                string fullName = match.Groups[2].Value;
+                if (fullName.Contains("zpp - Projekt - zespołowe przedsięwzięcie programistyczne"))
+                {
+                    courses.Add("P-zpp", "Projekt - zespołowe przedsięwzięcie programistyczne");
+                    continue;
+                }
+                try
+                {
+                    courses.Add(shortName, fullName);
+                }
+                catch
+                {
+                    continue;
+                }
+            }
         }
         return courses;
     }
@@ -184,14 +199,8 @@ public class WebScraper : IDisposable
                         }
                         _namesDictionary.TryAdd(hrefText, teacher);
                     }
-                    try
-                    {
-                        course.CourseFullName = courses[course.CourseShortName];
-                    }
-                    catch
-                    {
-                        course.CourseFullName = "Projekt - zespołowe przedsięwzięcie programistyczne";
-                    }
+                    course.CourseFullName = courses[course.CourseShortName];
+
                     tutor.Name = teacher;
                     tutor.Course = course;
                     if (course.Type.Contains("wyk"))
