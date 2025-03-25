@@ -20,7 +20,7 @@
                 <td>@tutor.CourseFullName</td>
                 <td>@tutor.CourseType</td>
                 <td>@tutor.ScheduleType</td>
-                <td>@tutor.IsLead</td>
+                <td>@(tutor.IsLead ? "Tak" : "Nie")</td>
             </tr>
         }
     </tbody>

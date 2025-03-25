@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Schedule_MVC.Models.ScrapedData>
 
-<h1>Teacher Information for @Model.Select(x => x.CourseFullName).First()</h1>
+<h1>Nauczyciele dla: @Model.Select(x => x.CourseFullName).First()</h1>
 @{
 	bool leadSubject = Model.Any(x => x.IsLead);
 	if(leadSubject){
-		<h3>Found the leading tutor:</h3>
+		<h3>Znaleziono prowadzącego/prowadzących:</h3>
 	}
 	else{
-		<h3>No tutors found, here's the list of all tutors for that course</h3>
+		<h3>Nie znaleziono prowadzących, oto lista wszystkich nauczycieli którzy uczą tego przedmiotu</h3>
 	}
 }
 <div class="container mt-4">
@@ -29,7 +29,7 @@
 			}
 		</tbody>
 </table>
-<strong><a asp-action="Index">Go back</a></strong>
+<strong><a asp-action="Index">Wstecz</a></strong>
     
 </div>
 
