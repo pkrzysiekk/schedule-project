@@ -41,7 +41,7 @@ public class ScraperController
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error whiile scrapping {link.Url}: {ex.Message}");
+                    Console.WriteLine($"Error while scrapping {link.Url}: {ex.Message}");
                 }
                 finally
                 {
